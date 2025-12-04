@@ -14,6 +14,12 @@ async function bootstrap() {
     logger: WinstonModule.createLogger(winstonConfig)
   });
 
+  app.enableCors({
+    origin: 'https://goormthon-2.goorm.training',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true
+  });
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

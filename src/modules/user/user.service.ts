@@ -7,6 +7,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserPreferredCategory } from '../meeting/entities/user-preferred-category.entity';
 import { TransactionService } from 'src/common/transaction/transaction.service';
 import { AuthService } from '../auth/auth.service';
+import { ResidencePeriods } from './constants/residencePeriod';
+import { residenceAreas } from './constants/residenceArea';
 
 @Injectable()
 export class UserService {
@@ -21,13 +23,11 @@ export class UserService {
 
   // 거주기간 목록 조회
   async getResidencePeriodList() {
-    const residencePeriods = ['1개월 미만', '1~3개월', '3~6개월', '6~12개월', '1년 이상'];
-    return residencePeriods;
+    return ResidencePeriods;
   }
 
   // 거주지역 목록 조회
   async getResidenceAreaList() {
-    const residenceAreas = ['연동', '아라동', '이도', '애월', '한림', '함덕', '중문', '서귀동', '위미', '성산'];
     return residenceAreas;
   }
 

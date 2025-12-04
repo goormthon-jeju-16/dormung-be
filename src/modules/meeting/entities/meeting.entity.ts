@@ -1,6 +1,5 @@
 import { Exclude } from 'class-transformer';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { MeetingCategoryName } from '../constants/meeting-category-name.enum';
 import { MeetingUser } from './meeting-user.entity';
 import { Board } from 'src/modules/board/entities/board.entity';
 import { BoardReply } from 'src/modules/board/entities/board-reply.entity';
@@ -19,7 +18,7 @@ export class Meeting {
   @Column({ type: 'varchar', comment: '지역' })
   area: string;
 
-  @Column({ type: 'tinyint', default: 0, comment: '활성화 여부' })
+  @Column({ type: 'tinyint', default: 1, comment: '활성화 여부' })
   isActive: number;
 
   @CreateDateColumn({ type: 'timestamp' })

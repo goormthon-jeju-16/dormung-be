@@ -73,6 +73,38 @@ export class MeetingService {
     return await this.createRecommendationForUser(user);
   }
 
+  // 내 참가 모임 목록 조회
+  async getMyMeetings(user: User) {
+    const userId = user.id;
+
+    const meetings = await this.meetingRepository.find({
+      select: {
+        id: true,
+        name: true,
+        area: true,
+        isActive: true,
+        meetingUsers: {
+          id: true,
+          user: {
+            id: true,
+            nickname: true,
+            profileImagePath: true
+          }
+        }
+      },
+      where: {
+        meetingUsers: { user: { id: userId } }
+      },
+      relations: ['meetingUsers', 'meetingUsers.user']
+    });
+
+    meetings.forEach((meeting) => {
+      this.markMeetingUserAsMine(meeting, user);
+    });
+
+    return meetings;
+  }
+
   // 모임 상세
   async getMeetingDetail(user: User, id: number) {
     const meeting = await this.meetingRepository.findOne({

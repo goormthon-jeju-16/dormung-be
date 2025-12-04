@@ -1,9 +1,8 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
-import { MeetingCategory } from 'src/modules/meeting/entities/meeting-category.entity';
-import { MeetingCategoryName } from 'src/modules/meeting/constants/meeting-category-name.enum';
 import { User } from 'src/modules/user/entities/user.entity';
-import { ResidencePeriod } from 'src/modules/user/constants/residencePeriod.enum';
+import { ResidencePeriods } from 'src/modules/user/constants/residencePeriod';
+import { residenceAreas } from 'src/modules/user/constants/residenceArea';
 
 export class UserSeeder implements Seeder {
   static priority = 2;
@@ -16,28 +15,18 @@ export class UserSeeder implements Seeder {
       return;
     }
 
-    const users = [
-      { residenceArea: '연동', nickname: '유저1', residencePeriod: ResidencePeriod.PLANNED_MOVE, introduceSelf: '안녕하세요 유저1입니다.', profileImagePath: '/path' },
-      { residenceArea: '아라동', nickname: '유저2', residencePeriod: ResidencePeriod.PLANNED_MOVE, introduceSelf: '안녕하세요 유저2입니다.', profileImagePath: '/path' },
-      { residenceArea: '이도', nickname: '유저3', residencePeriod: ResidencePeriod.SHORT_TERM_STAY, introduceSelf: '안녕하세요 유저3입니다.', profileImagePath: '/path' },
-      { residenceArea: '애월', nickname: '유저4', residencePeriod: ResidencePeriod.PLANNED_MOVE, introduceSelf: '안녕하세요 유저4입니다.', profileImagePath: '/path' },
-      { residenceArea: '한림', nickname: '유저5', residencePeriod: ResidencePeriod.SHORT_TERM_STAY, introduceSelf: '안녕하세요 유저5입니다.', profileImagePath: '/path' },
-      { residenceArea: '함덕', nickname: '유저6', residencePeriod: ResidencePeriod.THREE_YEARS_OVER, introduceSelf: '안녕하세요 유저6입니다.', profileImagePath: '/path' },
-      { residenceArea: '중문', nickname: '유저7', residencePeriod: ResidencePeriod.PLANNED_MOVE, introduceSelf: '안녕하세요 유저7입니다.', profileImagePath: '/path' },
-      { residenceArea: '서귀동', nickname: '유저8', residencePeriod: ResidencePeriod.SIX_MONTHS_UNDER, introduceSelf: '안녕하세요 유저8입니다.', profileImagePath: '/path' },
-      { residenceArea: '위미', nickname: '유저9', residencePeriod: ResidencePeriod.SIX_MONTHS_TO_3_YEARS, introduceSelf: '안녕하세요 유저9입니다.', profileImagePath: '/path' },
-      { residenceArea: '성산', nickname: '유저10', residencePeriod: ResidencePeriod.SIX_MONTHS_TO_3_YEARS, introduceSelf: '안녕하세요 유저10입니다.', profileImagePath: '/path' },
-      { residenceArea: '연동', nickname: '유저11', residencePeriod: ResidencePeriod.SHORT_TERM_STAY, introduceSelf: '안녕하세요 유저11입니다.', profileImagePath: '/path' },
-      { residenceArea: '아라동', nickname: '유저12', residencePeriod: ResidencePeriod.THREE_YEARS_OVER, introduceSelf: '안녕하세요 유저12입니다.', profileImagePath: '/path' },
-      { residenceArea: '이도', nickname: '유저13', residencePeriod: ResidencePeriod.PLANNED_MOVE, introduceSelf: '안녕하세요 유저13입니다.', profileImagePath: '/path' },
-      { residenceArea: '애월', nickname: '유저14', residencePeriod: ResidencePeriod.SIX_MONTHS_UNDER, introduceSelf: '안녕하세요 유저14입니다.', profileImagePath: '/path' },
-      { residenceArea: '한림', nickname: '유저15', residencePeriod: ResidencePeriod.SIX_MONTHS_TO_3_YEARS, introduceSelf: '안녕하세요 유저15입니다.', profileImagePath: '/path' },
-      { residenceArea: '함덕', nickname: '유저16', residencePeriod: ResidencePeriod.THREE_YEARS_OVER, introduceSelf: '안녕하세요 유저16입니다.', profileImagePath: '/path' },
-      { residenceArea: '중문', nickname: '유저17', residencePeriod: ResidencePeriod.PLANNED_MOVE, introduceSelf: '안녕하세요 유저17입니다.', profileImagePath: '/path' },
-      { residenceArea: '서귀동', nickname: '유저18', residencePeriod: ResidencePeriod.SIX_MONTHS_UNDER, introduceSelf: '안녕하세요 유저18입니다.', profileImagePath: '/path' },
-      { residenceArea: '위미', nickname: '유저19', residencePeriod: ResidencePeriod.SIX_MONTHS_TO_3_YEARS, introduceSelf: '안녕하세요 유저19입니다.', profileImagePath: '/path' },
-      { residenceArea: '성산', nickname: '유저20', residencePeriod: ResidencePeriod.SIX_MONTHS_TO_3_YEARS, introduceSelf: '안녕하세요 유저20입니다.', profileImagePath: '/path' }
-    ];
+    const dummyNicknames = ['한라바람', '오름길', '우도새빛', '섬바당', '돌하르', '귤향비', '감귤달', '바다초이', '노을빈', '산들문'];
+
+    let users: User[] = [];
+    for (let i = 0; i < residenceAreas.length; i++) {
+      const user = new User();
+      user.residenceArea = residenceAreas[i];
+      user.nickname = dummyNicknames[i];
+      user.residencePeriod = ResidencePeriods[Math.floor(Math.random() * ResidencePeriods.length)];
+      user.introduceSelf = `안녕하세요, 저는 ${residenceAreas[i]}에 거주하는 ${dummyNicknames[i]}입니다.`;
+      user.profileImagePath = `/images/profiles/test.jpg`;
+      users.push(user);
+    }
 
     await userRepo.save(users);
   }

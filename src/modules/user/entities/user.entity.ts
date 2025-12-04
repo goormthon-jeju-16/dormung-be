@@ -1,6 +1,5 @@
 import { Exclude } from 'class-transformer';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { ResidencePeriod } from '../constants/residencePeriod.enum';
 import { UserPreferredCategory } from 'src/modules/meeting/entities/user-preferred-category.entity';
 import { MeetingUser } from 'src/modules/meeting/entities/meeting-user.entity';
 import { Board } from 'src/modules/board/entities/board.entity';

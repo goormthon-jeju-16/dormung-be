@@ -1,7 +1,6 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { MeetingCategory } from 'src/modules/meeting/entities/meeting-category.entity';
-import { MeetingCategoryName } from 'src/modules/meeting/constants/meeting-category-name.enum';
 import { UserPreferredCategory } from 'src/modules/meeting/entities/user-preferred-category.entity';
 
 export class UserPreferredCategorySeeder implements Seeder {

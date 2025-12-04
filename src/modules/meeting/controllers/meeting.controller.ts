@@ -21,6 +21,12 @@ export class MeetingController {
     return await this.meetingService.getRecommendedMeetings(user);
   }
 
+  // 내 참가 모임 목록 조회
+  @Get('my/list')
+  async getMyMeetingList(@AuthUser() user: User) {
+    return await this.meetingService.getMyMeetings(user);
+  }
+
   // 모임 상세
   @Get(':id')
   async getMeetingDetail(@Param('id', ParseIntPipe) id: number, @AuthUser() user: User) {
