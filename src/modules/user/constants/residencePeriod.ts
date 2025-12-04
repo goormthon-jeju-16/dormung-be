@@ -1,1 +1,1 @@
-export const ResidencePeriods = ['6개월 미만', '6개월 이상 ~ 3년 미만', '3년 이상~', '이주 예정', '단기 체류 중'];
+export const ResidencePeriods = ['장기체류자(3개월 미만)', '이주민(3개월~2년 미만)', '선이주민·도민(2년 이상)']

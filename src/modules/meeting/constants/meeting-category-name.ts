@@ -1,1 +1,1 @@
-export const MeetingCategoryName = ['생활 정보 필요', '취미/여가 활동', '육아 정보', '친구/모임 만들기', '직업 네트워킹'];
+export const MeetingCategoryName = ['제주 로컬 탐방', '정착 지원·생활 공유', '친구·소셜링', '문화·예술', '운동·건강', '취미 만들기·공방', '자연·아웃도어'];
