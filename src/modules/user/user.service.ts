@@ -63,4 +63,26 @@ export class UserService {
     const { accessToken } = await this.authService.generateToken(user.id);
     return accessToken;
   }
+
+  // 유저 정보 조회
+  async getUserInfo(user: User) {
+    const findUser = await this.userRepository.findOne({
+      select: {
+        nickname: true,
+        profileImagePath: true,
+        residenceArea: true,
+        residencePeriod: true,
+        introduceSelf: true
+      },
+      where: {
+        id: user.id
+      }
+    });
+
+    if (!findUser) {
+      throw new NotFoundException(ErrorMessages.NOT_FOUND_DATA);
+    }
+
+    return findUser;
+  }
 }
