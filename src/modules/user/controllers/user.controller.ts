@@ -36,8 +36,8 @@ export class UserController {
     const accessToken = await this.userService.createUser(createUserDto);
 
     res.cookie(Cookies.USER_ACCESS_TOKEN, accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      httpOnly: false,
+      secure: false,
       sameSite: 'lax',
       maxAge: 1000 * 60 * 60 * 24 * 30
     });
