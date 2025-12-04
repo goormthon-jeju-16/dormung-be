@@ -34,12 +34,13 @@ export class MeetingService {
   // 유저 맞춤 추천 생성
   private async createRecommendationForUser(user: User) {
     // 임시 로직
-    const meetings = await this.meetingRepository.find({
+    const findMeetings = await this.meetingRepository.find({
       select: {
         id: true,
         name: true,
         area: true,
         isActive: true,
+        createdAt: true,
         meetingUsers: {
           id: true,
           user: {
@@ -55,6 +56,26 @@ export class MeetingService {
       },
       relations: ['meetingUsers', 'meetingUsers.user'],
       take: 2
+    });
+
+    const meetings = findMeetings.map((meeting) => {
+      const now = new Date();
+      const createdAt = new Date(meeting.createdAt);
+      const diffTime = Math.abs(now.getTime() - createdAt.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      let periodLabel = '';
+      if (diffDays <= 30) {
+        periodLabel = '신규';
+      } else {
+        const months = Math.floor(diffDays / 30);
+        periodLabel = `${months}개월 이상`;
+      }
+
+      return {
+        ...meeting,
+        periodLabel
+      };
     });
 
     return meetings;

@@ -70,6 +70,7 @@ export class BoardService {
   // 모임 게시판 글 상세
   async getBoardDetail(id: number, user: User) {
     const userId = user.id;
+    console.log('log', id);
 
     const findBoard = await this.boardRepository.findOne({
       select: {
@@ -94,12 +95,19 @@ export class BoardService {
       where: {
         id
       },
-      relations: ['user', 'boardReplies']
+      relations: {
+        user: true,
+        boardReplies: {
+          user: true
+        }
+      }
     });
 
     if (!findBoard) {
       throw new BadRequestException(ErrorMessages.NOT_FOUND_DATA);
     }
+
+    console.log('log', findBoard);
 
     this.markedMine(findBoard, userId);
 
