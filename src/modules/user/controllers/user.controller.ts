@@ -38,8 +38,10 @@ export class UserController {
     res.cookie(Cookies.USER_ACCESS_TOKEN, accessToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'lax',
+      // sameSite: 'lax',
+      sameSite: 'none',
       maxAge: 1000 * 60 * 60 * 24 * 30,
+      path: '/'
     });
 
     return true;
