@@ -15,8 +15,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: 'https://goormthon-2.goorm.training',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    origin: true,
     credentials: true
   });
 
