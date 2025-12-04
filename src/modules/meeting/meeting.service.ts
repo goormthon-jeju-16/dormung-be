@@ -7,6 +7,7 @@ import { Meeting } from './entities/meeting.entity';
 import { MeetingUser } from './entities/meeting-user.entity';
 import { ErrorMessages } from 'src/common/constants/error-messages.enum';
 import { MeetingCategory } from './entities/meeting-category.entity';
+import { OpenaiService } from 'src/services/openai/openai.service';
 
 @Injectable()
 export class MeetingService {
@@ -18,7 +19,8 @@ export class MeetingService {
     @InjectRepository(MeetingUser)
     private readonly meetingUserRepository: Repository<MeetingUser>,
     @InjectRepository(MeetingCategory)
-    private readonly meetingCategoryRepository: Repository<MeetingCategory>
+    private readonly meetingCategoryRepository: Repository<MeetingCategory>,
+    private readonly openaiService: OpenaiService
   ) {}
 
   // 모임 카테고리 목록 조회
@@ -33,6 +35,44 @@ export class MeetingService {
 
   // 유저 맞춤 추천 생성
   private async createRecommendationForUser(user: User) {
+    // const myProfile = await this.userRepository.findOne({
+    //   select: {
+    //     id: true,
+    //     residencePeriod: true,
+    //     residenceArea: true,
+    //     userPreferredCategories: {
+    //       id: true,
+    //       meetingCategory: { name: true }
+    //     }
+    //   },
+    //   where: { id: user.id },
+    //   relations: {
+    //     userPreferredCategories: {
+    //       meetingCategory: true
+    //     }
+    //   }
+    // });
+
+    // if (!myProfile) {
+    //   throw new BadRequestException(ErrorMessages.NOT_FOUND_DATA);
+    // }
+
+    // const users = await this.userRepository.find({
+    //   select: {
+    //     id: true,
+    //     residencePeriod: true,
+    //     residenceArea: true
+    //   },
+    //   relations: {
+    //     userPreferredCategories: true
+    //   },
+    //   where: {
+    //     id: Not(myProfile.id),
+    //     residencePeriod: Not(myProfile.residencePeriod)
+    //   }
+    // });
+
+    // return this.openaiService.createRecommendMeeting(myProfile, users);
     // 임시 로직
     const findMeetings = await this.meetingRepository.find({
       select: {
@@ -46,7 +86,10 @@ export class MeetingService {
           user: {
             id: true,
             nickname: true,
-            profileImagePath: true
+            profileImagePath: true,
+            residencePeriod: true,
+            residenceArea: true,
+            introduceSelf: true
           }
         }
       },
@@ -98,18 +141,22 @@ export class MeetingService {
   async getMyMeetings(user: User) {
     const userId = user.id;
 
-    const meetings = await this.meetingRepository.find({
+    const findMeetings = await this.meetingRepository.find({
       select: {
         id: true,
         name: true,
         area: true,
         isActive: true,
+        createdAt: true,
         meetingUsers: {
           id: true,
           user: {
             id: true,
             nickname: true,
-            profileImagePath: true
+            profileImagePath: true,
+            residencePeriod: true,
+            residenceArea: true,
+            introduceSelf: true
           }
         }
       },
@@ -119,8 +166,28 @@ export class MeetingService {
       relations: ['meetingUsers', 'meetingUsers.user']
     });
 
-    meetings.forEach((meeting) => {
+    findMeetings.forEach((meeting) => {
       this.markMeetingUserAsMine(meeting, user);
+    });
+
+    const meetings = findMeetings.map((meeting) => {
+      const now = new Date();
+      const createdAt = new Date(meeting.createdAt);
+      const diffTime = Math.abs(now.getTime() - createdAt.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      let periodLabel = '';
+      if (diffDays <= 30) {
+        periodLabel = '신규';
+      } else {
+        const months = Math.floor(diffDays / 30);
+        periodLabel = `${months}개월 이상`;
+      }
+
+      return {
+        ...meeting,
+        periodLabel
+      };
     });
 
     return meetings;

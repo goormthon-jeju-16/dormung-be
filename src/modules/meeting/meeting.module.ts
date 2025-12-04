@@ -6,6 +6,7 @@ import { MeetingCategory } from './entities/meeting-category.entity';
 import { User } from '../user/entities/user.entity';
 import { Meeting } from './entities/meeting.entity';
 import { MeetingUser } from './entities/meeting-user.entity';
+import { OpenaiModule } from 'src/services/openai/openai.module';
 
 @Module({
   imports: [
@@ -13,8 +14,9 @@ import { MeetingUser } from './entities/meeting-user.entity';
       MeetingCategory,
       User,
       Meeting,
-      MeetingUser
+      MeetingUser,
     ]),
+    OpenaiModule
   ],
   controllers: [MeetingController],
   providers: [MeetingService],

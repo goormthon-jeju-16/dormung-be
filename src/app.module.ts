@@ -14,6 +14,7 @@ import { winstonConfig } from './config/winston.config';
 import { UserModule } from './modules/user/user.module';
 import { MeetingModule } from './modules/meeting/meeting.module';
 import { BoardModule } from './modules/board/board.module';
+import { OpenaiModule } from './services/openai/openai.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { BoardModule } from './modules/board/board.module';
     FileModule,
     UserModule,
     MeetingModule,
-    BoardModule
+    BoardModule,
+    OpenaiModule
   ],
   controllers: [AppController],
   providers: [AppService]
