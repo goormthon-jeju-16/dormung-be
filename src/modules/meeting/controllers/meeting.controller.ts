@@ -8,6 +8,13 @@ import { User } from 'src/modules/user/entities/user.entity';
 export class MeetingController {
   constructor(private readonly meetingService: MeetingService) {}
 
+  @Public()
+  @Get('category/list')
+  // 모임 카테고리 목록 조회
+  async getMeetingCategoryList() {
+    return await this.meetingService.getMeetingCategoryList();
+  }
+
   // 추천 모임 목록 조회
   @Get('recommend/list')
   async getRecommendList(@AuthUser() user: User) {

@@ -2,6 +2,7 @@ import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { MeetingCategory } from 'src/modules/meeting/entities/meeting-category.entity';
 import { MeetingCategoryName } from 'src/modules/meeting/constants/meeting-category-name.enum';
+import { convertMeetingCategoryNameToKorean } from 'src/common/utils/string';
 
 export class ProductMainSectionSeeder implements Seeder {
   static priority = 1;
@@ -14,10 +15,12 @@ export class ProductMainSectionSeeder implements Seeder {
       return;
     }
 
-    const meetingCategoryNamePromises = Object.keys(MeetingCategoryName).map(async (key, index) => {
-      const name = MeetingCategoryName[key as keyof typeof MeetingCategoryName];
+    const meetingCategoryNamePromises = Object.keys(MeetingCategoryName).map(async (item, index) => {
+      const key = MeetingCategoryName[item as keyof typeof MeetingCategoryName];
+      const name = convertMeetingCategoryNameToKorean(item);
 
       return meetingCategoryRepo.create({
+        key,
         name
       });
     });

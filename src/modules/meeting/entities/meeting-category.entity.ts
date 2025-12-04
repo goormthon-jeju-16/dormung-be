@@ -8,8 +8,11 @@ export class MeetingCategory {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'varchar', comment: '카테고리 키' })
+  key: MeetingCategoryName;
+  
   @Column({ type: 'varchar', comment: '카테고리 이름' })
-  name: MeetingCategoryName;
+  name: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

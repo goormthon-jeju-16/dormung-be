@@ -6,6 +6,7 @@ import { TransactionService } from 'src/common/transaction/transaction.service';
 import { Meeting } from './entities/meeting.entity';
 import { MeetingUser } from './entities/meeting-user.entity';
 import { ErrorMessages } from 'src/common/constants/error-messages.enum';
+import { MeetingCategory } from './entities/meeting-category.entity';
 
 @Injectable()
 export class MeetingService {
@@ -16,7 +17,19 @@ export class MeetingService {
     private readonly meetingRepository: Repository<Meeting>,
     @InjectRepository(MeetingUser)
     private readonly meetingUserRepository: Repository<MeetingUser>,
+    @InjectRepository(MeetingCategory)
+    private readonly meetingCategoryRepository: Repository<MeetingCategory>
   ) {}
+
+  // 모임 카테고리 목록 조회
+  public async getMeetingCategoryList() {
+    return await this.meetingCategoryRepository.find({
+      select: {
+        id: true,
+        name: true
+      }
+    });
+  }
 
   // 유저 맞춤 추천 생성
   private async createRecommendationForUser(user: User) {
