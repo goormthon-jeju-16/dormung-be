@@ -36,10 +36,10 @@ export class UserController {
     const accessToken = await this.userService.createUser(createUserDto);
 
     res.cookie(Cookies.USER_ACCESS_TOKEN, accessToken, {
-      httpOnly: false,
+      httpOnly: true,
       secure: false,
       sameSite: 'lax',
-      maxAge: 1000 * 60 * 60 * 24 * 30
+      maxAge: 1000 * 60 * 60 * 24 * 30,
     });
 
     return true;
