@@ -12,7 +12,7 @@ export class UserController {
 
   @Public()
   @Get('test')
-  async testI() {
-    return 'User Controller Test Success';
+  async test() {
+    return 'User Controller Test Success!!!!';
   }
 }
