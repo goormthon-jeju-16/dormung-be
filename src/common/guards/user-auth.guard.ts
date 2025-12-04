@@ -29,8 +29,7 @@ export class UserJwtAuthGuard implements CanActivate {
     }
 
     const verifiedToken = this.authService.verifyToken(token, false);
-
-    if (verifiedToken.role !== Role.USER) {
+    if (!verifiedToken) {
       throw new UnauthorizedException(ErrorMessages.ACCESS_DENIED);
     }
 

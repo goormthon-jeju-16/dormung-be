@@ -6,11 +6,13 @@ import { User } from './entities/user.entity';
 import { AuthModule } from '../auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { UserJwtAuthGuard } from 'src/common/guards/user-auth.guard';
+import { UserPreferredCategory } from '../meeting/entities/user-preferred-category.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       User,
+      UserPreferredCategory
     ]),
     AuthModule
   ],

@@ -1,4 +1,3 @@
 export enum Cookies {
-  USER_REFRESH_TOKEN = '_URT',
-  ADMIN_REFRESH_TOKEN = '_ART',
+  USER_ACCESS_TOKEN = '_DORMUNG_UAT'
 }

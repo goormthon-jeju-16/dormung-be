@@ -21,6 +21,9 @@ export class User {
   @Column({ type: 'varchar', comment: '자기소개' })
   introduceSelf: string;
 
+  @Column({ type: 'varchar', comment: '프로필 이미지 경로', nullable: true })
+  profileImagePath: string;
+
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
