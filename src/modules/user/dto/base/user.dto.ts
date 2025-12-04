@@ -1,5 +1,4 @@
 import { IsNotEmpty, IsString, Length, Matches } from 'class-validator';
-import { ResidencePeriod } from '../../constants/residencePeriod.enum';
 
 export class UserDto {
   @IsNotEmpty()
@@ -14,7 +13,7 @@ export class UserDto {
 
   @IsNotEmpty()
   @IsString()
-  residencePeriod: ResidencePeriod;
+  residencePeriod: string;
 
   @IsNotEmpty()
   @IsString()

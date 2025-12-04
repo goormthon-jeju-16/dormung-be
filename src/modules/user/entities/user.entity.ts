@@ -18,7 +18,7 @@ export class User {
   nickname: string;
 
   @Column({ type: 'varchar', comment: '체류기간' })
-  residencePeriod: ResidencePeriod;
+  residencePeriod: string;
 
   @Column({ type: 'varchar', comment: '자기소개' })
   introduceSelf: string;

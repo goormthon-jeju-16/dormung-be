@@ -21,6 +21,13 @@ export class UserController {
     return this.userService.getResidencePeriodList();
   }
 
+  // 거주지역 조회
+  @Public()
+  @Get('residence-area/list')
+  async getResidenceAreaList() {
+    return this.userService.getResidenceAreaList();
+  }
+
   // 유저 회원가입
   @Public()
   @Post('join')

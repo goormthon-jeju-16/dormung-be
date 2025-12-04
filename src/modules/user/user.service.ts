@@ -25,6 +25,12 @@ export class UserService {
     return residencePeriods;
   }
 
+  // 거주지역 목록 조회
+  async getResidenceAreaList() {
+    const residenceAreas = ['연동', '아라동', '이도', '애월', '한림', '함덕', '중문', '서귀동', '위미', '성산'];
+    return residenceAreas;
+  }
+
   // 유저 생성
   async createUser(createUserDto: CreateUserDto) {
     const { residenceArea, nickname, residencePeriod, introduceSelf, profileImagePath, userPreferredCategoryIds } = createUserDto;
