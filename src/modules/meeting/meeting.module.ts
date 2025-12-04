@@ -4,12 +4,16 @@ import { MeetingService } from './meeting.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MeetingCategory } from './entities/meeting-category.entity';
 import { User } from '../user/entities/user.entity';
+import { Meeting } from './entities/meeting.entity';
+import { MeetingUser } from './entities/meeting-user.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       MeetingCategory,
-      User
+      User,
+      Meeting,
+      MeetingUser
     ]),
   ],
   controllers: [MeetingController],

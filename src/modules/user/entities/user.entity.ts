@@ -3,6 +3,8 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryG
 import { ResidencePeriod } from '../constants/residencePeriod.enum';
 import { UserPreferredCategory } from 'src/modules/meeting/entities/user-preferred-category.entity';
 import { MeetingUser } from 'src/modules/meeting/entities/meeting-user.entity';
+import { Board } from 'src/modules/board/entities/board.entity';
+import { BoardReply } from 'src/modules/board/entities/board-reply.entity';
 
 @Entity({ comment: '유저' })
 export class User {
@@ -39,4 +41,10 @@ export class User {
 
   @OneToMany(() => MeetingUser, (meetingUser) => meetingUser.user)
   meetingUsers: MeetingUser[];
+
+  @OneToMany(() => Board, (board) => board.user)
+  boards: Board[];
+
+  @OneToMany(() => BoardReply, (boardReply) => boardReply.user)
+  boardReplies: BoardReply[];
 }

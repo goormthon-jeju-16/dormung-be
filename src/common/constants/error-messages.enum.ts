@@ -10,5 +10,6 @@ export enum ErrorMessages {
   NOT_FOUND_DATA = '데이터를 찾을 수 없습니다.',
   INVALID_TOKEN = 'INVALID_TOKEN',
   NOT_FOUND_TOKEN = 'NOT_FOUND_TOKEN',
-  EXPIRED_TOKEN = 'EXPIRED_TOKEN'
+  EXPIRED_TOKEN = 'EXPIRED_TOKEN',
+  ALREADY_JOINED_MEETING = '이미 참가한 모임입니다.'
 }

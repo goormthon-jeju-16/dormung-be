@@ -2,11 +2,16 @@ import { Exclude } from 'class-transformer';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { MeetingCategoryName } from '../constants/meeting-category-name.enum';
 import { MeetingUser } from './meeting-user.entity';
+import { Board } from 'src/modules/board/entities/board.entity';
+import { BoardReply } from 'src/modules/board/entities/board-reply.entity';
 
 @Entity({ comment: '모임' })
 export class Meeting {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ type: 'varchar', comment: '모임 카테고리 이름' })
+  categoryName: string;
 
   @Column({ type: 'varchar', comment: '모임명' })
   name: string;
@@ -29,4 +34,7 @@ export class Meeting {
 
   @OneToMany(() => MeetingUser, (meetingUser) => meetingUser.meeting)
   meetingUsers: MeetingUser[];
+
+  @OneToMany(() => Board, (board) => board.meeting)
+  boards: Board[];
 }

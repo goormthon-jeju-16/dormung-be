@@ -13,6 +13,7 @@ import { WinstonModule } from 'nest-winston';
 import { winstonConfig } from './config/winston.config';
 import { UserModule } from './modules/user/user.module';
 import { MeetingModule } from './modules/meeting/meeting.module';
+import { BoardModule } from './modules/board/board.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MeetingModule } from './modules/meeting/meeting.module';
     FileModule,
     UserModule,
     MeetingModule,
+    BoardModule
   ],
   controllers: [AppController],
   providers: [AppService]
