@@ -20,6 +20,8 @@ spec:
         envFrom:
           - configMapRef:
               name: backend-config
+          - secretRef:
+              name: backend-secret
         volumeMounts:
         - name: config-volume
           mountPath: /app/config
