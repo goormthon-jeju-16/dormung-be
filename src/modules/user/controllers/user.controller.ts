@@ -13,6 +13,6 @@ export class UserController {
   @Public()
   @Get('test')
   async test() {
-    return 'User Controller Test Success!!!!';
+    return 'User Controller Test Success@@@';
   }
 }
