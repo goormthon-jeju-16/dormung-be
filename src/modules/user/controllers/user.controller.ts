@@ -46,7 +46,6 @@ export class UserController {
   }
 
   // 유저 정보 조회
-  @Public()
   @Get('/info')
   async getUserInfo(@AuthUser() user: User) {
     return this.userService.getUserInfo(user);
