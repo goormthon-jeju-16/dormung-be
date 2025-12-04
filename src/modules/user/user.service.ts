@@ -19,6 +19,12 @@ export class UserService {
     private readonly authService: AuthService
   ) {}
 
+  // 거주기간 목록 조회
+  async getResidencePeriodList() {
+    const residencePeriods = ['1개월 미만', '1~3개월', '3~6개월', '6~12개월', '1년 이상'];
+    return residencePeriods;
+  }
+
   // 유저 생성
   async createUser(createUserDto: CreateUserDto) {
     const { residenceArea, nickname, residencePeriod, introduceSelf, profileImagePath, userPreferredCategoryIds } = createUserDto;

@@ -13,6 +13,14 @@ export class UserController {
     private readonly authService: AuthService
   ) {}
 
+  
+  // 거주기간 조회
+  @Public()
+  @Get('residence-period/list')
+  async getResidencePeriodList() {
+    return this.userService.getResidencePeriodList();
+  }
+
   // 유저 회원가입
   @Public()
   @Post('join')
