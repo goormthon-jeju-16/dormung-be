@@ -12,7 +12,7 @@ import { UserJwtAuthGuard } from 'src/common/guards/user-auth.guard';
     TypeOrmModule.forFeature([
       User,
     ]),
-    AuthModule,
+    AuthModule
   ],
   controllers: [
     UserController,
