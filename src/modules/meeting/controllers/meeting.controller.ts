@@ -8,7 +8,7 @@ import { User } from 'src/modules/user/entities/user.entity';
 export class MeetingController {
   constructor(private readonly meetingService: MeetingService) {}
 
-  // 추천 모임 목록 생성 및 조회
+  // 추천 모임 목록 조회
   @Get('recommend/list')
   async getRecommendList(@AuthUser() user: User) {
     return await this.meetingService.getRecommendedMeetings(user);
@@ -24,5 +24,11 @@ export class MeetingController {
   @Post('join/:id')
   async joinMeeting(@Param('id', ParseIntPipe) id: number, @AuthUser() user: User) {
     return await this.meetingService.joinMeeting(user, id);
+  }
+
+  // 모임 탈퇴
+  @Post('leave/:id')
+  async leaveMeeting(@Param('id', ParseIntPipe) id: number, @AuthUser() user: User) {
+    return await this.meetingService.leaveMeeting(user, id);
   }
 }
