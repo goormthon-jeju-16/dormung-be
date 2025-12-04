@@ -19,8 +19,8 @@ export class UserJwtAuthGuard implements CanActivate {
       return true;
     }
 
-    req['_user'] = { id: 42 };
-    return true;
+    // req['_user'] = { id: 42 };
+    // return true;
     const token = this.authService.extractTokenFromHeader(req);
     if (!token || req.url.startsWith('/common')) {
       if (isPublic) {

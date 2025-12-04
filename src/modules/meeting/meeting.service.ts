@@ -33,75 +33,186 @@ export class MeetingService {
     });
   }
 
-  // 유저 맞춤 추천 생성
+  /**
+   * 기획과 실제 내용이 다름 추후 수정 필요
+   */
   private async createRecommendationForUser(user: User) {
-    // const myProfile = await this.userRepository.findOne({
-    //   select: {
-    //     id: true,
-    //     residencePeriod: true,
-    //     residenceArea: true,
-    //     userPreferredCategories: {
-    //       id: true,
-    //       meetingCategory: { name: true }
-    //     }
-    //   },
-    //   where: { id: user.id },
-    //   relations: {
-    //     userPreferredCategories: {
-    //       meetingCategory: true
-    //     }
-    //   }
-    // });
-
-    // if (!myProfile) {
-    //   throw new BadRequestException(ErrorMessages.NOT_FOUND_DATA);
-    // }
-
-    // const users = await this.userRepository.find({
-    //   select: {
-    //     id: true,
-    //     residencePeriod: true,
-    //     residenceArea: true
-    //   },
-    //   relations: {
-    //     userPreferredCategories: true
-    //   },
-    //   where: {
-    //     id: Not(myProfile.id),
-    //     residencePeriod: Not(myProfile.residencePeriod)
-    //   }
-    // });
-
-    // return this.openaiService.createRecommendMeeting(myProfile, users);
-    // 임시 로직
     const findMeetings = await this.meetingRepository.find({
       select: {
         id: true,
+        categoryName: true,
         name: true,
         area: true,
-        isActive: true,
-        createdAt: true,
         meetingUsers: {
           id: true,
           user: {
             id: true,
-            nickname: true,
-            profileImagePath: true,
-            residencePeriod: true,
-            residenceArea: true,
-            introduceSelf: true
+            residencePeriod: true
           }
         }
       },
-      where: {
-        isActive: 1,
-        meetingUsers: { user: { id: Not(user.id) } }
+      relations: {
+        meetingUsers: {
+          user: true
+        }
       },
-      relations: ['meetingUsers', 'meetingUsers.user'],
-      take: 2
+      where: {
+        isActive: 1
+      }
     });
 
-    const meetings = findMeetings.map((meeting) => {
+    const findUserProfile = await this.userRepository.findOne({
+      select: {
+        id: true,
+        residencePeriod: true,
+        residenceArea: true,
+        userPreferredCategories: {
+          id: true,
+          meetingCategory: { name: true }
+        }
+      },
+      where: { id: user.id },
+      relations: {
+        userPreferredCategories: {
+          meetingCategory: true
+        }
+      }
+    });
+
+    if (!findUserProfile) {
+      throw new BadRequestException(ErrorMessages.NOT_FOUND_DATA);
+    }
+
+    const userProfile = {
+      id: findUserProfile.id,
+      residencePeriod: findUserProfile.residencePeriod,
+      residenceArea: findUserProfile.residenceArea,
+      preferredCategories: findUserProfile.userPreferredCategories.filter((upc) => upc?.meetingCategory).map((upc) => upc.meetingCategory.name)
+    };
+
+    const meetingTargets = findMeetings
+      .filter((item) => item.meetingUsers.every((mu) => mu.user.id !== user.id))
+      .map((meeting) => {
+        return {
+          id: meeting.id,
+          categoryName: meeting.categoryName,
+          name: meeting.name,
+          area: meeting.area,
+          memberResidencePeriods: meeting.meetingUsers.map((mu) => mu.user.residencePeriod)
+        };
+      });
+
+    const meetingIds = await this.openaiService.createRecommendMeeting(meetingTargets, userProfile);
+    let meetings: Meeting[] = [];
+
+    if (!meetingIds.length) {
+      meetings = await this.meetingRepository.find({
+        select: {
+          id: true,
+          name: true,
+          area: true,
+          isActive: true,
+          createdAt: true,
+          meetingUsers: {
+            id: true,
+            user: {
+              id: true,
+              nickname: true,
+              profileImagePath: true,
+              residencePeriod: true,
+              residenceArea: true,
+              introduceSelf: true
+            }
+          }
+        },
+        where: {
+          isActive: 1,
+          meetingUsers: { user: { id: Not(user.id) } }
+        },
+        relations: ['meetingUsers', 'meetingUsers.user'],
+        take: 2
+      });
+    } else if (meetingIds.length === 1) {
+      const firstMeeting = await this.meetingRepository.findOne({
+        where: { id: meetingIds[0], isActive: 1 },
+        relations: ['meetingUsers', 'meetingUsers.user'],
+        select: {
+          id: true,
+          name: true,
+          area: true,
+          isActive: true,
+          createdAt: true,
+          meetingUsers: {
+            id: true,
+            user: {
+              id: true,
+              nickname: true,
+              profileImagePath: true,
+              residencePeriod: true,
+              residenceArea: true,
+              introduceSelf: true
+            }
+          }
+        }
+      });
+
+      const secondMeeting = await this.meetingRepository.findOne({
+        where: {
+          isActive: 1,
+          id: Not(meetingIds[0]),
+          meetingUsers: { user: { id: Not(user.id) } }
+        },
+        relations: ['meetingUsers', 'meetingUsers.user'],
+        select: {
+          id: true,
+          name: true,
+          area: true,
+          isActive: true,
+          createdAt: true,
+          meetingUsers: {
+            id: true,
+            user: {
+              id: true,
+              nickname: true,
+              profileImagePath: true,
+              residencePeriod: true,
+              residenceArea: true,
+              introduceSelf: true
+            }
+          }
+        }
+      });
+
+      meetings = [firstMeeting, secondMeeting].filter(Boolean) as Meeting[];
+    } else {
+      meetings = await this.meetingRepository.find({
+        select: {
+          id: true,
+          name: true,
+          area: true,
+          isActive: true,
+          createdAt: true,
+          meetingUsers: {
+            id: true,
+            user: {
+              id: true,
+              nickname: true,
+              profileImagePath: true,
+              residencePeriod: true,
+              residenceArea: true,
+              introduceSelf: true
+            }
+          }
+        },
+        where: [
+          { id: meetingIds[0], isActive: 1 },
+          { id: meetingIds[1], isActive: 1 }
+        ],
+        relations: ['meetingUsers', 'meetingUsers.user']
+      });
+    }
+
+    meetings = meetings.map((meeting) => {
       const now = new Date();
       const createdAt = new Date(meeting.createdAt);
       const diffTime = Math.abs(now.getTime() - createdAt.getTime());
