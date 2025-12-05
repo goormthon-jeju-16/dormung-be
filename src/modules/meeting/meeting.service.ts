@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '../user/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import { TransactionService } from 'src/common/transaction/transaction.service';
 import { Meeting } from './entities/meeting.entity';
 import { MeetingUser } from './entities/meeting-user.entity';
@@ -252,6 +252,10 @@ export class MeetingService {
   async getMyMeetings(user: User) {
     const userId = user.id;
 
+    const meetingIdsResult = await this.meetingRepository.createQueryBuilder('m').leftJoin('meeting_users', 'mu', 'mu.meeting_id = m.id').where('mu.user_id = :userId', { userId }).select('m.id', 'id').getRawMany();
+
+    const meetingIds = meetingIdsResult.map((row) => row.id); // 배열 형태로 변환
+
     const findMeetings = await this.meetingRepository.find({
       select: {
         id: true,
@@ -272,9 +276,13 @@ export class MeetingService {
         }
       },
       where: {
-        meetingUsers: { user: { id: userId } }
+        id: In(meetingIds)
       },
-      relations: ['meetingUsers', 'meetingUsers.user']
+      relations: {
+        meetingUsers: {
+          user: true
+        }
+      }
     });
 
     findMeetings.forEach((meeting) => {
